@@ -16,6 +16,7 @@ const bot = new TelegramBot(TOKEN, { polling: true });
 const db = new Map(); // Replace with Firebase/MongoDB later
 
 app.use(bodyParser.json());
+app.use(express.static('public')); // Serve static files from public directory
 
 // ===== 1. Telegram Bot Logic =====
 bot.onText(/\/start/, (msg) => {
@@ -24,7 +25,7 @@ bot.onText(/\/start/, (msg) => {
     reply_markup: {
       inline_keyboard: [[{
         text: 'Open WebApp',
-        web_app: { url: `${FRONTEND_URL}/welcome?tgid=${chatId}` }
+        web_app: { url: `${FRONTEND_URL}/?tgid=${chatId}` }
       }]]
     }
   });

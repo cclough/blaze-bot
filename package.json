@@ -1,8 +1,11 @@
 {
     "name": "blaze-bot",
+    "version": "1.0.0",
+    "description": "Telegram Bot for BloodX with WebApp integration",
     "main": "blaze-bot.js",
     "scripts": {
-      "start": "node blaze-bot.js"
+      "start": "node blaze-bot.js",
+      "build": "npm install"
     },
     "dependencies": {
       "body-parser": "^1.20.0",
@@ -10,5 +13,8 @@
       "node-telegram-bot-api": "^0.61.0",
       "qrcode": "^1.5.1",
       "dotenv": "^16.0.0"
+    },
+    "engines": {
+      "node": ">=18.0.0"
     }
   }

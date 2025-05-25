@@ -901,6 +901,16 @@
         .glitch-jitter { animation-name: glitch-jitter !important; }
         .glitch-teleport { animation-name: glitch-teleport !important; }
         .glitch-stutter { animation-name: glitch-stutter !important; }
+
+        button {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -1289,17 +1299,8 @@
             });
         });
     </script>
-    <!-- <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
 
-        function submitForm() {
-        const name = document.getElementById('name').value;
-        tg.sendData(JSON.stringify({ name }));
-        }
-  </script> -->
-
-    <!-- index.html (or whatever you called it) -->
+    <!-- index.html  -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
     const tg = window.Telegram.WebApp;   // Mini-app bridge
@@ -1310,6 +1311,27 @@
         const name = document.getElementById('name').value;
         tg.sendData(JSON.stringify({name}));
         tg.close();                        // Close the mini-app (optional)
+    }
+    </script>
+
+    <h2>Understand Your Immune System</h2>
+    <p>Run a 48-cytokine inflammation test. Results visualized in Telegram.</p>
+    <button onclick="buyTest()">Buy Test</button>
+
+    <script>
+    function buyTest() {
+        const tgid = new URLSearchParams(window.location.search).get('tgid');
+        fetch('https://blaze-bot-xq6m.onrender.com/api/webapp-complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telegramId: tgid })
+        }).then(() => {
+        if (window.Telegram.WebApp) {
+            window.Telegram.WebApp.close(); // closes and returns to bot
+        } else {
+            alert("Now return to Telegram to finish checkout.");
+        }
+        });
     }
     </script>
 </body>
