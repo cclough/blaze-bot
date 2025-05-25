@@ -25,7 +25,7 @@ bot.onText(/\/start/, (msg) => {
     reply_markup: {
       inline_keyboard: [[{
         text: 'Open WebApp',
-        web_app: { url: `${FRONTEND_URL}/?tgid=${chatId}` }
+        web_app: { url: `${FRONTEND_URL}/index.html?tgid=${chatId}` }
       }]]
     }
   });
@@ -34,15 +34,28 @@ bot.onText(/\/start/, (msg) => {
 // After user taps "Buy Test" on WebApp
 app.post('/api/webapp-complete', async (req, res) => {
   const { telegramId } = req.body;
-  bot.sendMessage(telegramId, `Great! Tap below to pay.`, {
-    reply_markup: {
-      inline_keyboard: [[{
-        text: 'Pay via Stripe',
-        url: STRIPE_CHECKOUT_LINK
-      }]]
-    }
-  });
-  res.sendStatus(200);
+  console.log('Received webapp-complete request for telegramId:', telegramId);
+  
+  if (!telegramId) {
+    console.error('No telegramId provided');
+    return res.status(400).json({ error: 'telegramId is required' });
+  }
+  
+  try {
+    await bot.sendMessage(telegramId, `Great! Tap below to pay.`, {
+      reply_markup: {
+        inline_keyboard: [[{
+          text: 'Pay via Stripe',
+          url: STRIPE_CHECKOUT_LINK
+        }]]
+      }
+    });
+    console.log('Successfully sent payment message to:', telegramId);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
 });
 
 // Mock Stripe webhook to confirm payment

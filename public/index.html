@@ -1384,16 +1384,35 @@
     <script>
     function buyTest() {
         const tgid = new URLSearchParams(window.location.search).get('tgid');
-        fetch('https://blaze-bot-xq6m.onrender.com/api/webapp-complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telegramId: tgid })
-        }).then(() => {
-        if (window.Telegram.WebApp) {
-            window.Telegram.WebApp.close(); // closes and returns to bot
-        } else {
-            alert("Now return to Telegram to finish checkout.");
+        
+        if (!tgid) {
+            alert('Error: No Telegram ID found. Please open this from Telegram.');
+            return;
         }
+        
+        // Use relative URL so it works with your deployed Render app
+        fetch('/api/webapp-complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ telegramId: tgid })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(() => {
+            console.log('Successfully sent to backend');
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.close(); // closes and returns to bot
+            } else {
+                alert("Now return to Telegram to finish checkout.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error processing request. Please try again.');
         });
     }
     </script>
