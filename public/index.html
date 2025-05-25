@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloodX - Background</title>
+    <title>Blaze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Russo+One&family=Audiowide&family=Black+Ops+One&family=Bungee&family=Monoton&family=Wallpoet&family=Electrolize&family=Share+Tech+Mono&family=Iceberg&family=Faster+One&family=Megrim&family=Jura:wght@300;400;500;600;700&family=Saira+Stencil+One&family=Turret+Road:wght@200;300;400;500;700;800&family=Michroma&family=Syncopate:wght@400;700&family=Teko:wght@300;400;500;600;700&family=Squada+One&family=Aldrich&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -919,57 +922,713 @@
             padding: 5rem;
         }
 
-        .content-card {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 400px;
-            pointer-events: auto; /* Re-enable clicks for the card */
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                 .content-card {
+             background: rgba(0, 0, 0, 0.85);
+             backdrop-filter: blur(12px) saturate(0.8);
+             border: 2px solid rgba(255, 255, 255, 0.15);
+             border-radius: 20px;
+             padding: 0;
+             max-width: 288px;
+             max-height: 80vh;
+             pointer-events: auto; /* Re-enable clicks for the card */
+             box-shadow: 
+                 0 8px 32px rgba(0, 0, 0, 0.4),
+                 0 0 80px rgba(255, 255, 255, 0.05),
+                 inset 0 0 30px rgba(255, 255, 255, 0.02);
+             position: relative;
+             overflow: hidden;
+             animation: card-glitch 15s infinite;
+             display: flex;
+             flex-direction: column;
+         }
+
+         .content-scroll {
+             padding: 1rem 2.5rem 2rem 2.5rem;
+             overflow-y: auto;
+             flex: 1;
+             scrollbar-width: thin;
+             scrollbar-color: rgba(255, 140, 0, 0.5) rgba(0, 0, 0, 0.2);
+         }
+
+         .blaze-logo {
+             position: relative;
+             margin: 1rem 0 2rem 0;
+             height: 120px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             overflow: visible;
+         }
+
+         .blaze-letter {
+             font-family: 'Teko', 'Squada One', 'Aldrich', 'Quantico', 'Rajdhani', 'Exo 2', monospace;
+             font-weight: 600;
+             font-style: normal;
+             position: relative;
+             display: inline-block;
+             background: linear-gradient(135deg, #ffaa00, #ff8c00, #ff6600, #ffaa00);
+             background-size: 300% 300%;
+             -webkit-background-clip: text;
+             background-clip: text;
+             -webkit-text-fill-color: transparent;
+             animation: blood-flow 4s infinite, letter-pulse 3s infinite;
+             filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4)) drop-shadow(0 0 15px rgba(255, 170, 0, 0.2)) drop-shadow(0 0 25px rgba(255, 170, 0, 0.1)) drop-shadow(0 0 35px rgba(255, 170, 0, 0.05));
+             text-transform: uppercase;
+             letter-spacing: 0.05em;
+             text-shadow: 0 0 10px rgba(255, 170, 0, 0.3), 0 0 20px rgba(255, 170, 0, 0.2), 0 0 30px rgba(255, 170, 0, 0.1);
+             transform: skewX(-8deg);
+         }
+
+         .blaze-letter.b {
+             font-size: 5.5rem;
+             transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.3);
+             animation-delay: 0s;
+             margin-right: -0.05em;
+         }
+
+         .blaze-letter.l {
+             font-size: 4rem;
+             transform: skewX(-8deg) translateY(0px) translateX(0px) scaleX(0.8);
+             animation-delay: 0.2s;
+             margin-right: -0.05em;
+         }
+
+         .blaze-letter.a {
+             font-size: 4rem;
+             transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.0);
+             animation-delay: 0.4s;
+             margin-right: -0.05em;
+         }
+
+         .blaze-letter.z {
+             font-size: 4rem;
+             transform: skewX(-8deg) translateY(0px) translateX(0px) scaleX(1.2);
+             animation-delay: 0.6s;
+             margin-right: -0.05em;
+         }
+
+         .blaze-letter.e {
+             font-size: 4rem;
+             transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.0);
+             animation-delay: 0.8s;
+         }
+
+         /* Blood particles container */
+         .blaze-logo::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             pointer-events: none;
+             overflow: visible;
+             z-index: 1;
+         }
+
+         /* Blood particles */
+         .blood-particle {
+             position: absolute;
+             border-radius: 50%;
+             background: linear-gradient(45deg, rgba(255, 170, 0, 0.6), rgba(255, 140, 0, 0.8));
+             animation: particle-flow linear infinite;
+             pointer-events: none;
+         }
+
+         /* Organic blood vessels */
+         .blaze-logo::after {
+             content: '';
+             position: absolute;
+             top: 50%;
+             left: 0;
+             width: 100%;
+             height: 3px;
+             background: 
+                 radial-gradient(ellipse at 20% 50%, rgba(255, 170, 0, 0.6) 0%, transparent 50%),
+                 radial-gradient(ellipse at 60% 50%, rgba(255, 140, 0, 0.4) 0%, transparent 40%),
+                 radial-gradient(ellipse at 90% 50%, rgba(255, 102, 0, 0.5) 0%, transparent 30%);
+             transform: translateY(-50%);
+             animation: vessel-pulse 2s infinite;
+             border-radius: 50px;
+         }
+
+         /* Individual letter blood effects */
+         .blaze-letter::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: linear-gradient(
+                 180deg,
+                 rgba(255, 170, 0, 0.2) 0%,
+                 rgba(255, 140, 0, 0.3) 50%,
+                 rgba(255, 102, 0, 0.2) 100%
+             );
+             -webkit-background-clip: text;
+             background-clip: text;
+             -webkit-text-fill-color: transparent;
+             animation: letter-blood-flow 2s infinite;
+             opacity: 0;
+         }
+
+         .content-scroll::-webkit-scrollbar {
+             width: 6px;
+         }
+
+         .content-scroll::-webkit-scrollbar-track {
+             background: rgba(0, 0, 0, 0.2);
+             border-radius: 3px;
+         }
+
+         .content-scroll::-webkit-scrollbar-thumb {
+             background: linear-gradient(180deg, rgba(255, 140, 0, 0.6), rgba(255, 69, 0, 0.6));
+             border-radius: 3px;
+             animation: scroll-glow 2s infinite;
+         }
+
+         .content-scroll::-webkit-scrollbar-thumb:hover {
+             background: linear-gradient(180deg, rgba(255, 140, 0, 0.8), rgba(255, 69, 0, 0.8));
+         }
+
+         .button-container {
+             padding: 1rem 2.5rem 1rem 2.5rem;
+             border-top: 1px solid rgba(255, 140, 0, 0.1);
+             background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+         }
+
+        /* Glitch border effect */
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 70%);
+            animation: border-scan 3s linear infinite;
+            z-index: -1;
+        }
+
+        /* Glitch overlay for card */
+        .content-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px
+                );
+            animation: scan-lines-vertical 8s linear infinite;
+            pointer-events: none;
+            opacity: 0.5;
         }
 
         h2 {
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin: 0 0 1rem 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 1.2rem 0;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.5px;
+            animation: text-glitch 10s infinite;
+            position: relative;
         }
 
-        p {
-            color: #cccccc;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 1rem;
-            line-height: 1.5;
-            margin: 0 0 2rem 0;
+        /* Glitch text effect for h2 */
+        h2::before,
+        h2::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
         }
 
-        button {
-            background: linear-gradient(135deg, #007aff, #0056cc);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        h2::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff0000;
+            z-index: -1;
         }
 
-        button:hover {
-            background: linear-gradient(135deg, #0056cc, #003d99);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.4);
+        h2::after {
+            animation: glitch-2 0.5s infinite;
+            color: #00ffff;
+            z-index: -2;
         }
+
+                 p {
+             color: #dddddd;
+             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+             font-size: 0.9rem;
+             line-height: 1.5;
+             margin: 0 0 1.2rem 0;
+             opacity: 0.9;
+             animation: text-flicker 8s infinite;
+         }
+
+         h3 {
+             color: #ffffff;
+             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+             font-size: 1.1rem;
+             font-weight: 600;
+             margin: 1.5rem 0 0.8rem 0;
+             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+             opacity: 0.95;
+         }
+
+         .diagram-placeholder {
+             background: rgba(255, 140, 0, 0.05);
+             border: 1px solid rgba(255, 140, 0, 0.2);
+             border-radius: 8px;
+             padding: 1.5rem;
+             margin: 1.5rem 0;
+             position: relative;
+             overflow: hidden;
+         }
+
+         .diagram-placeholder::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: -100%;
+             width: 100%;
+             height: 100%;
+             background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.1), transparent);
+             animation: diagram-scan 3s infinite;
+         }
+
+         .diagram-title {
+             color: #ff8c00;
+             font-size: 0.9rem;
+             font-weight: 600;
+             margin-bottom: 1rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+
+         .diagram-content {
+             display: flex;
+             align-items: center;
+             justify-content: space-around;
+             flex-wrap: wrap;
+             gap: 1rem;
+         }
+
+         .node {
+             background: rgba(255, 107, 53, 0.2);
+             border: 1px solid rgba(255, 107, 53, 0.4);
+             border-radius: 20px;
+             padding: 0.5rem 1rem;
+             color: #ff6b35;
+             font-size: 0.9rem;
+             font-weight: 500;
+             animation: node-pulse 2s infinite;
+         }
+
+         .step {
+             color: #ff8c00;
+             font-size: 0.9rem;
+             font-weight: 500;
+             text-align: center;
+             width: 100%;
+         }
+
+         .connection {
+             width: 2px;
+             height: 20px;
+             background: linear-gradient(180deg, rgba(255, 140, 0, 0.6), rgba(255, 69, 0, 0.6));
+             animation: connection-flow 1.5s infinite;
+         }
+
+                 button {
+             background: linear-gradient(135deg, #ffaa00, #ff8c00, #ffaa00);
+             background-size: 200% 200%;
+             color: white;
+             border: 2px solid transparent;
+             padding: 0.8rem 2.5rem;
+             width: 100%;
+             font-size: 1.2rem;
+             font-weight: 700;
+             border-radius: 12px;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             box-shadow: 
+                 0 4px 20px rgba(255, 170, 0, 0.4),
+                 inset 0 0 20px rgba(255, 255, 255, 0.1),
+                 0 0 30px rgba(255, 140, 0, 0.2);
+             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+             position: relative;
+             overflow: hidden;
+             animation: button-pulse 2s infinite, flame-shift 3s infinite;
+             white-space: nowrap;
+         }
+
+         button span {
+             position: relative;
+             z-index: 2;
+             display: block;
+             animation: button-text-glitch 12s infinite;
+         }
+
+         button span::before,
+         button span::after {
+             content: 'BUY TEST';
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             opacity: 0;
+         }
+
+         button span::before {
+             animation: button-glitch-1 0.3s infinite;
+             color: #ffdd00;
+             z-index: -1;
+         }
+
+         button span::after {
+             animation: button-glitch-2 0.3s infinite;
+             color: #ff6600;
+             z-index: -2;
+         }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+                 button:hover {
+             background: linear-gradient(135deg, #ff8c00, #ff6600, #ffaa00);
+             background-size: 200% 200%;
+             transform: translateY(-2px) scale(1.02);
+             box-shadow: 
+                 0 6px 30px rgba(255, 140, 0, 0.6),
+                 inset 0 0 30px rgba(255, 255, 255, 0.2),
+                 0 0 40px rgba(255, 170, 0, 0.4);
+             border-color: rgba(255, 170, 0, 0.3);
+             animation: button-glitch 0.3s infinite, flame-shift 1.5s infinite;
+         }
 
         button:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
+
+        /* Glitch animations */
+        @keyframes card-glitch {
+            0%, 95% { 
+                transform: translate(0);
+                filter: brightness(1);
+            }
+            95.5% { 
+                transform: translate(-1px, 0);
+                filter: brightness(1.1) contrast(1.2);
+            }
+            96% { 
+                transform: translate(1px, 0);
+                filter: brightness(0.9);
+            }
+            96.5% { 
+                transform: translate(0, 1px);
+                filter: brightness(1.05);
+            }
+            97%, 100% { 
+                transform: translate(0);
+                filter: brightness(1);
+            }
+        }
+
+        @keyframes border-scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        @keyframes scan-lines-vertical {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        @keyframes text-glitch {
+            0%, 93%, 100% { 
+                text-shadow: 
+                    0 2px 4px rgba(0, 0, 0, 0.8),
+                    0 0 20px rgba(255, 255, 255, 0.2);
+            }
+            94% { 
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.8),
+                    0 0 30px rgba(255, 255, 255, 0.4),
+                    -2px 0 0 rgba(255, 0, 0, 0.5),
+                    2px 0 0 rgba(0, 255, 255, 0.5);
+            }
+        }
+
+        @keyframes glitch-1 {
+            0%, 90%, 100% { opacity: 0; }
+            91% { opacity: 0.8; transform: translate(-2px, -2px); }
+            92% { opacity: 0; }
+        }
+
+        @keyframes glitch-2 {
+            0%, 90%, 100% { opacity: 0; }
+            91.5% { opacity: 0.8; transform: translate(2px, 2px); }
+            92.5% { opacity: 0; }
+        }
+
+        @keyframes text-flicker {
+            0%, 97%, 100% { opacity: 0.9; }
+            98% { opacity: 0.7; }
+            99% { opacity: 1; }
+        }
+
+                 @keyframes button-pulse {
+             0%, 100% { 
+                 box-shadow: 
+                     0 4px 20px rgba(255, 170, 0, 0.4),
+                     inset 0 0 20px rgba(255, 255, 255, 0.1),
+                     0 0 30px rgba(255, 140, 0, 0.2);
+             }
+             50% { 
+                 box-shadow: 
+                     0 4px 30px rgba(255, 170, 0, 0.6),
+                     inset 0 0 25px rgba(255, 255, 255, 0.15),
+                     0 0 40px rgba(255, 140, 0, 0.3);
+             }
+         }
+
+         @keyframes flame-shift {
+             0% { background-position: 0% 50%; }
+             50% { background-position: 100% 50%; }
+             100% { background-position: 0% 50%; }
+         }
+
+         @keyframes scroll-glow {
+             0%, 100% { opacity: 0.6; }
+             50% { opacity: 0.8; }
+         }
+
+         @keyframes diagram-scan {
+             0% { left: -100%; }
+             100% { left: 100%; }
+         }
+
+         @keyframes node-pulse {
+             0%, 100% { 
+                 transform: scale(1);
+                 box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+             }
+             50% { 
+                 transform: scale(1.05);
+                 box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+             }
+         }
+
+         @keyframes connection-flow {
+             0%, 100% { opacity: 0.6; }
+             50% { opacity: 1; }
+         }
+
+         @keyframes blood-flow {
+             0% { 
+                 background-position: 0% 50%;
+                 filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4));
+             }
+             25% { 
+                 background-position: 50% 25%;
+                 filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.6));
+             }
+             50% { 
+                 background-position: 100% 50%;
+                 filter: drop-shadow(0 0 15px rgba(255, 102, 0, 0.8));
+             }
+             75% { 
+                 background-position: 50% 75%;
+                 filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.6));
+             }
+             100% { 
+                 background-position: 0% 50%;
+                 filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4));
+             }
+         }
+
+         @keyframes particle-flow {
+             0% { 
+                 transform: translateX(-50px);
+                 opacity: 0;
+             }
+             3% { 
+                 opacity: 1;
+             }
+             97% { 
+                 opacity: 1;
+             }
+             100% { 
+                 transform: translateX(350px);
+                 opacity: 0;
+             }
+         }
+
+         @keyframes letter-pulse {
+             0%, 100% { 
+                 transform: scale(1);
+             }
+             50% { 
+                 transform: scale(1.03);
+             }
+         }
+
+         /* Individual letter breathing effects */
+         .blaze-letter.b { animation: blood-flow 4s infinite, letter-pulse 3s infinite, organic-sway-1 5s infinite; }
+         .blaze-letter.l { animation: blood-flow 4s infinite 0.3s, letter-pulse 3s infinite 0.3s, organic-sway-2 4.5s infinite; }
+         .blaze-letter.a { animation: blood-flow 4s infinite 0.6s, letter-pulse 3s infinite 0.6s, organic-sway-3 5.5s infinite; }
+         .blaze-letter.z { animation: blood-flow 4s infinite 0.9s, letter-pulse 3s infinite 0.9s, organic-sway-4 4.8s infinite; }
+         .blaze-letter.e { animation: blood-flow 4s infinite 1.2s, letter-pulse 3s infinite 1.2s, organic-sway-5 5.2s infinite; }
+
+         @keyframes organic-sway-1 {
+             0%, 100% { transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.3); }
+             50% { transform: skewX(-6deg) translateY(-2px) translateX(1px) scaleY(1.35); }
+         }
+
+         @keyframes organic-sway-2 {
+             0%, 100% { transform: skewX(-8deg) translateY(0px) translateX(0px) scaleX(0.8); }
+             50% { transform: skewX(-10deg) translateY(-1px) translateX(-1px) scaleX(0.85); }
+         }
+
+         @keyframes organic-sway-3 {
+             0%, 100% { transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.0); }
+             50% { transform: skewX(-6deg) translateY(-2px) translateX(1px) scaleY(1.05); }
+         }
+
+         @keyframes organic-sway-4 {
+             0%, 100% { transform: skewX(-8deg) translateY(0px) translateX(0px) scaleX(1.2); }
+             50% { transform: skewX(-10deg) translateY(-1px) translateX(-1px) scaleX(1.25); }
+         }
+
+         @keyframes organic-sway-5 {
+             0%, 100% { transform: skewX(-8deg) translateY(0px) translateX(0px) scaleY(1.0); }
+             50% { transform: skewX(-6deg) translateY(-2px) translateX(1px) scaleY(1.05); }
+         }
+
+
+
+         @keyframes vessel-pulse {
+             0%, 100% { 
+                 opacity: 0.6;
+                 transform: translateY(-50%) scaleY(1);
+             }
+             50% { 
+                 opacity: 1;
+                 transform: translateY(-50%) scaleY(1.5);
+             }
+         }
+
+         @keyframes letter-blood-flow {
+             0%, 70%, 100% { 
+                 opacity: 0;
+             }
+             80% { 
+                 opacity: 0.6;
+             }
+             90% { 
+                 opacity: 0.8;
+             }
+         }
+
+                 @keyframes button-glitch {
+             0%, 80%, 100% { 
+                 transform: translateY(-2px) scale(1.02);
+             }
+             85% { 
+                 transform: translateY(-2px) scale(1.02) translateX(-1px);
+             }
+             90% { 
+                 transform: translateY(-2px) scale(1.02) translateX(1px);
+             }
+         }
+
+         @keyframes button-text-glitch {
+             0%, 95%, 100% { 
+                 text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+             }
+             96% { 
+                 text-shadow: 
+                     -2px 0 0 rgba(255, 221, 0, 0.8),
+                     2px 0 0 rgba(255, 102, 0, 0.8),
+                     0 0 10px rgba(255, 255, 255, 0.6);
+             }
+         }
+
+         @keyframes button-glitch-1 {
+             0%, 95%, 100% { opacity: 0; }
+             96% { opacity: 0.7; transform: translate(-2px, -1px); }
+             97% { opacity: 0; }
+         }
+
+         @keyframes button-glitch-2 {
+             0%, 95%, 100% { opacity: 0; }
+             96.5% { opacity: 0.7; transform: translate(2px, 1px); }
+             97.5% { opacity: 0; }
+         }
+
+         /* Add some random digital noise */
+         .content-card {
+             position: relative;
+         }
+
+         .content-card .digital-noise {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background: 
+                 radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                 radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.02) 0%, transparent 50%),
+                 radial-gradient(circle at 40% 40%, rgba(255, 0, 64, 0.02) 0%, transparent 50%);
+             animation: noise-shift 4s infinite;
+             pointer-events: none;
+             border-radius: 20px;
+             overflow: hidden;
+         }
+
+         @keyframes noise-shift {
+             0%, 100% { transform: translate(0, 0) scale(1); }
+             25% { transform: translate(-1px, 1px) scale(1.001); }
+             50% { transform: translate(1px, -1px) scale(0.999); }
+             75% { transform: translate(-1px, -1px) scale(1.001); }
+         }
     </style>
 </head>
 <body>
@@ -1329,6 +1988,42 @@
             `;
         }
 
+        // Function to create blood particles
+        function createBloodParticle() {
+            const blazeLogo = document.querySelector('.blaze-logo');
+            if (!blazeLogo) return;
+            
+            const particle = document.createElement('div');
+            particle.classList.add('blood-particle');
+            
+            // Random size between 2px and 8px
+            const size = 2 + Math.random() * 6;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random vertical position within the logo area
+            const logoHeight = blazeLogo.offsetHeight;
+            const yPosition = Math.random() * logoHeight;
+            particle.style.top = `${yPosition}px`;
+            particle.style.left = '-50px'; // Start further left to prevent sticking
+            
+            // Random animation duration between 2s and 4s
+            const duration = 2 + Math.random() * 2;
+            particle.style.animationDuration = `${duration}s`;
+            
+            // No delay to prevent accumulation
+            particle.style.animationDelay = '0s';
+            
+            blazeLogo.appendChild(particle);
+            
+            // Remove particle after animation completes with buffer time
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, (duration + 0.5) * 1000); // Add 0.5s buffer
+        }
+
         // Initialize everything
         document.addEventListener('DOMContentLoaded', () => {
             populateCells();
@@ -1338,6 +2033,9 @@
             setTimeout(() => {
                 applyGlitchyMovement();
             }, 2000); // Wait 2 seconds after initial setup
+            
+            // Start creating blood particles - 125% more frequent than original
+            setInterval(createBloodParticle, 133 + Math.random() * 178); // Create particle every 133-311ms (125% more frequent than original)
             
             setInterval(triggerRandomGlitch, 2667 + Math.random() * 2000); // 50% more often: was 4000 + Math.random() * 3000
             setInterval(addStaticInterference, 6000 + Math.random() * 4000);
@@ -1373,48 +2071,108 @@
     }
     </script>
 
+    <script>
+    function buyTest() {
+
+        const telegram = window.Telegram?.WebApp;
+        if (!telegram || !telegram.initDataUnsafe || !telegram.initDataUnsafe.user) {
+            alert("Error: No Telegram ID found. Please open this from Telegram.");
+        return;
+        }
+
+        const telegramId = telegram.initDataUnsafe.user.id;
+
+        Telegram.WebApp.openLink(
+            'https://buy.stripe.com/test_aFaeVd5a40zp5yQ2bD2kw01',
+            { try_instant_view: false }                // regular web-view
+        );
+
+        // console.log('Sending request for telegramId:', telegramId);
+        
+        // fetch('https://blaze-bot-xq6m.onrender.com/api/webapp-complete', {
+        //     method: 'POST',
+        //     headers: { 
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json'
+        //     },
+        //     body: JSON.stringify({ telegramId })
+        // })
+        // .then(response => {
+        //     console.log('Response status:', response.status);
+        //     if (!response.ok) {
+        //         throw new Error(`HTTP error! status: ${response.status}`);
+        //     }
+        //     return response.text();
+        // })
+        // .then(data => {
+        //     console.log('Success:', data);
+        //     if (telegram) {
+        //         telegram.close();
+        //     } else {
+        //         alert("Payment link sent! Return to Telegram to continue.");
+        //     }
+        // })
+        // .catch(error => {
+        //     console.error('Error:', error);
+        //     alert('Error processing request: ' + error.message);
+        // });
+    }
+    </script>
+
     <div class="content-overlay">
         <div class="content-card">
-            <h2>Understand Your Immune System</h2>
-            <p>Run a 48-cytokine inflammation test. Results visualized in Telegram.</p>
-            <button onclick="buyTest()">Buy Test</button>
+            <div class="digital-noise"></div>
+            <div class="content-scroll">
+                <div class="blaze-logo">
+                    <span class="blaze-letter b">b</span>
+                    <span class="blaze-letter l">l</span>
+                    <span class="blaze-letter a">a</span>
+                    <span class="blaze-letter z">z</span>
+                    <span class="blaze-letter e">e</span>
+                </div>
+                <h2 data-text="Understand Your Immune System">Understand Your Immune System</h2>
+                
+                <p>Run a comprehensive 48-cytokine inflammation test. Results visualized in real-time through Telegram with advanced biomarker analysis.</p>
+                
+                <h3>What We Measure</h3>
+                <p>Our advanced panel analyzes key inflammatory markers including interleukins (IL-1β, IL-6, IL-8, IL-10), tumor necrosis factors (TNF-α), interferons (IFN-γ), and chemokines that regulate immune cell migration and activation.</p>
+                
+                <div class="diagram-placeholder">
+                    <div class="diagram-title">Cytokine Network Analysis</div>
+                    <div class="diagram-content">
+                        <div class="node">IL-6</div>
+                        <div class="node">TNF-α</div>
+                        <div class="node">IL-1β</div>
+                        <div class="connection"></div>
+                    </div>
+                </div>
+                
+                <h3>Clinical Applications</h3>
+                <p>This comprehensive inflammatory profile helps identify systemic inflammation patterns associated with autoimmune conditions, metabolic disorders, cardiovascular risk, and chronic inflammatory states. Early detection enables targeted interventions.</p>
+                
+                <h3>Sample Collection</h3>
+                <p>Simple blood draw at our certified collection centers. Samples are processed using advanced multiplex immunoassay technology with results typically available within 3-5 business days.</p>
+                
+                <div class="diagram-placeholder">
+                    <div class="diagram-title">Processing Pipeline</div>
+                    <div class="diagram-content">
+                        <div class="step">Collection → Processing → Analysis → Results</div>
+                    </div>
+                </div>
+                
+                <h3>Personalized Insights</h3>
+                <p>Your results include detailed explanations of each biomarker, reference ranges, and personalized recommendations based on your unique inflammatory signature. All data is securely transmitted through our encrypted Telegram integration.</p>
+                
+                <p>Advanced machine learning algorithms analyze patterns across multiple cytokines to provide comprehensive risk assessments and actionable health insights tailored to your individual profile.</p>
+            </div>
+            <div class="button-container">
+                <button onclick="buyTest()">
+                    <span>Start Test</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <script>
-    function buyTest() {
-        const tgid = new URLSearchParams(window.location.search).get('tgid');
-        
-        if (!tgid) {
-            alert('Error: No Telegram ID found. Please open this from Telegram.');
-            return;
-        }
-        
-        // Use relative URL so it works with your deployed Render app
-        fetch('/api/webapp-complete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ telegramId: tgid })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(() => {
-            console.log('Successfully sent to backend');
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.close(); // closes and returns to bot
-            } else {
-                alert("Now return to Telegram to finish checkout.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error processing request. Please try again.');
-        });
-    }
-    </script>
+ 
 </body>
 </html>
