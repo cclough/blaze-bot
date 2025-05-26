@@ -15,72 +15,85 @@
     text-align: center;
     padding: 20px;
     box-sizing: border-box;
+    background: #f9fafb;
   }
   #message {
     font-size: 16px;
     margin-bottom: 20px;
+    padding: 2rem 2.5rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
   }
   .status-complete { color: #22c55e; }
   .status-open { color: #f59e0b; }
   .status-expired { color: #ef4444; }
   .status-error { color: #ef4444; }
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
 
-<div id="message">Loading payment status...</div>
+<div id="message">
+  <div class="spinner"></div>
+  Loading payment status...
+</div>
 
 <script>
   Telegram.WebApp.ready();
   
-  const stripe = Stripe('YOUR_STRIPE_PUBLISHABLE_KEY');
+  const stripe = Stripe('pk_test_51RSmgFHILCjSlj9r8aaZUKvBDt66nmhRiw5rNa6MbAoOC2PU2WCSfvqMkkIc8Z6KPin0bRJbuHQR0hayywU552wy00CtP4mF3r');
   const messageDiv = document.getElementById('message');
 
   const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get('session_id');
 
+  function updateMessage(text, className) {
+    messageDiv.innerHTML = text; // Remove spinner
+    messageDiv.className = className;
+  }
+
   if (sessionId) {
-    stripe.retrieveCheckoutSession(sessionId).then(({session, error}) => {
-      if (error) {
-        console.error('Error retrieving session:', error);
-        messageDiv.textContent = "Error retrieving payment status. Please check with support.";
-        messageDiv.className = 'status-error';
-        Telegram.WebApp.showAlert("Error: " + error.message);
-        return;
-      }
-
-      if (!session) {
-        messageDiv.textContent = "Could not retrieve payment session details.";
-        messageDiv.className = 'status-error';
-        Telegram.WebApp.showAlert("Could not retrieve payment session details.");
-        return;
-      }
-
+    stripe.retrieveCheckoutSession(sessionId).then(({session}) => {
+      console.log('Session retrieved:', session);
+      
       let userMessage = '';
       let messageClass = '';
       let autoClose = false;
 
       switch (session.status) {
         case 'complete':
-          userMessage = "✅ Payment successful! Thank you. Your QR code will be sent in the chat.";
+          userMessage = "✅ Payment successful! Thank you.<br><br>Your QR code will be sent in the chat.";
           messageClass = 'status-complete';
           autoClose = true;
           break;
         case 'open':
-          userMessage = "⏳ Your payment is still processing. We'll notify you once completed.";
+          userMessage = "⏳ Your payment is still processing.<br><br>We'll notify you once completed.";
           messageClass = 'status-open';
           break;
         case 'expired':
-          userMessage = "⚠️ Payment session expired. Please go back and try again.";
+          userMessage = "⚠️ Payment session expired.<br><br>Please go back and try again.";
           messageClass = 'status-expired';
           break;
         default:
-          userMessage = `⚠️ Payment status: ${session.status}. Please contact support if this persists.`;
+          userMessage = `⚠️ Payment status: ${session.status}.<br><br>Please contact support if this persists.`;
           messageClass = 'status-error';
           break;
       }
-      messageDiv.textContent = userMessage;
-      messageDiv.className = messageClass;
+      
+      updateMessage(userMessage, messageClass);
 
       if (autoClose && window.Telegram && window.Telegram.WebApp) {
         Telegram.WebApp.HapticFeedback.notificationOccurred('success');
@@ -90,19 +103,18 @@
       }
 
     }).catch(err => {
-      console.error('Stripe.js error:', err);
-      messageDiv.textContent = "An error occurred while checking payment status.";
-      messageDiv.className = 'status-error';
-      Telegram.WebApp.showAlert("Stripe.js error: " + err.message);
+      console.error('Error retrieving session:', err);
+      updateMessage(
+        "An error occurred while checking payment status.<br><br>" +
+        "Please check your Telegram chat for confirmation.",
+        'status-error'
+      );
     });
   } else {
-    messageDiv.textContent = "Invalid payment session. Please return to the bot and try again.";
-    messageDiv.className = 'status-error';
-    Telegram.WebApp.showAlert("Invalid payment session.");
-    if (window.Telegram && window.Telegram.WebApp) {
-        setTimeout(() => {
-        }, 3000);
-    }
+    updateMessage(
+      "No payment session found.<br><br>Please return to the bot and try again.",
+      'status-error'
+    );
   }
 </script>
 </body></html>
