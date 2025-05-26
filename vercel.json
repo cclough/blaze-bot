@@ -12,8 +12,20 @@
   ],
   "routes": [
     {
+      "src": "/stripe-webhook",
+      "dest": "blaze-bot.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "blaze-bot.js"
+    },
+    {
+      "src": "/paid.html",
+      "dest": "public/paid.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "public/index.html"
     },
     {
       "src": "/.well-known/(.*)",
@@ -24,7 +36,8 @@
       "dest": "public/index.html"
     },
     {
-      "handle": "filesystem"
+      "src": "/(.*)",
+      "dest": "public/$1"
     }
   ]
 } 
