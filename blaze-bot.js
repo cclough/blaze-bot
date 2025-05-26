@@ -88,19 +88,6 @@ app.get('/api/create-checkout', async (req,res)=>{
   }
 });
 
-// Helper function to send QR code
-async function sendQRCode(telegramId) {
-  try {
-    console.log('📱 Sending QR code to telegram user:', telegramId);
-    const qrBuffer = await QRCode.toBuffer(`appt-${Date.now()}-tg-${telegramId}`);
-    await bot.sendPhoto(telegramId, qrBuffer, { caption: 'Show this QR at your blood draw.' });
-    await bot.sendMessage(telegramId, '✅ Payment received – see you soon!');
-    console.log('✅ QR code sent to user successfully');
-  } catch (error) {
-    console.error('❌ Error sending QR code:', error);
-  }
-}
-
 // Process payment after successful checkout
 app.post('/api/process-payment', async (req, res) => {
   try {
@@ -118,8 +105,7 @@ app.post('/api/process-payment', async (req, res) => {
       // Process payment directly here
       const insertData = { 
         telegram_id: telegram_id, 
-        status: 'paid',
-        payment_id: session.payment_intent
+        status: 'paid'
       };
       console.log('💾 Attempting to insert payment data:', insertData);
       
@@ -145,6 +131,19 @@ app.post('/api/process-payment', async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
+// Helper function to send QR code
+async function sendQRCode(telegramId) {
+  try {
+    console.log('📱 Sending QR code to telegram user:', telegramId);
+    const qrBuffer = await QRCode.toBuffer(`appt-${Date.now()}-tg-${telegramId}`);
+    await bot.sendMessage(telegramId, '✅ Payment received – see you soon!');
+    await bot.sendPhoto(telegramId, qrBuffer, { caption: 'Show this QR at your blood draw.' });
+    console.log('✅ QR code sent to user successfully');
+  } catch (error) {
+    console.error('❌ Error sending QR code:', error);
+  }
+}
 
 module.exports = app;
 
