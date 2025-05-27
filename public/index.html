@@ -74,15 +74,12 @@
         </div>
         <div class="button-container">
           <!-- onclick="buyTest()" -->
-            <button>
-                <span>Start Test</span>
+            <button id="pay-button">
+                <span>Book Test</span>
             </button>
         </div>
 
-        <div class="box">
-          <h1>Blaze Cytokine Panel</h1>
-          <p>$1 donation to cover lab cost</p>
-        </div>
+        <div class="box"></div>
       
     </div>
   </div>
@@ -94,7 +91,8 @@
 
   <script>
     Telegram.WebApp.ready();
-    const btn = Telegram.WebApp.MainButton;
+    // const btn = Telegram.WebApp.MainButton;
+    const btn2 = document.getElementById('pay-button');
     const boxElement = document.querySelector('.box');
     const checkoutElement = document.getElementById('checkout');
     const modalElement = document.getElementById('modal');
@@ -103,10 +101,11 @@
 
     let stripe; // Don't initialize yet
 
-    btn.setText('Pay $1').show();
+    // btn.setText('Pay $1').show();
 
-    btn.onClick(async () => {
-      btn.showProgress();
+    // btn.onClick(async () => {
+    btn2.addEventListener('click', async () => {
+      // btn.showProgress();
 
       const tgid = Telegram.WebApp.initDataUnsafe.user.id;
       const response = await fetch(`https://blaze-bot-five.vercel.app/api/create-checkout?tgid=${tgid}`);
@@ -115,14 +114,14 @@
       if (error) {
         console.error('Error from backend:', error);
         Telegram.WebApp.showAlert('Could not initiate payment. ' + error);
-        btn.hideProgress();
+        // btn.hideProgress();
         return;
       }
 
       if (!client_secret) {
         console.error('Client secret not received');
         Telegram.WebApp.showAlert('Could not initiate payment. Missing client secret.');
-        btn.hideProgress();
+        // btn.hideProgress();
         return;
       }
       
@@ -135,7 +134,7 @@
         backgroundElement.style.display = 'none';
       }
       checkoutElement.style.display = 'block';
-      btn.hide();
+      // btn.hide();
 
       try {
         const checkout = await stripe.initEmbeddedCheckout({
@@ -148,8 +147,8 @@
         Telegram.WebApp.showAlert('Could not display payment form. ' + e.message);
         if (boxElement) boxElement.style.display = 'block';
         checkoutElement.style.display = 'none';
-        btn.setText('Pay $1').show();
-        btn.hideProgress();
+        // btn.setText('Pay $1').show();
+        // btn.hideProgress();
       }
     });
   </script>
