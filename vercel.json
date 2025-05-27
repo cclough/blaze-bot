@@ -24,6 +24,10 @@
       "dest": "public/index.html"
     },
     {
+      "src": "/results.html",
+      "dest": "public/results.html"
+    },
+    {
       "src": "/",
       "dest": "public/index.html"
     },
