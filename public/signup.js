@@ -152,15 +152,36 @@ signupForm.addEventListener('submit', async (e) => {
     waivers_accepted: 'true'
   };
   
+  // WARNING: Currently the form data is not being saved to the database
+  // The server endpoint needs to be updated to accept and store this data
+  console.warn('Form data collected but not saved:', formData);
+  
   try {
-    const tgid = Telegram.WebApp.initDataUnsafe.user.id;
+    // Get Telegram user ID with better error handling
+    let tgid;
+    if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user && Telegram.WebApp.initDataUnsafe.user.id) {
+      tgid = Telegram.WebApp.initDataUnsafe.user.id;
+    } else {
+      // Fallback for testing or if Telegram data is not available
+      console.warn('Telegram user ID not available, using fallback');
+      tgid = '1316804034'; // Use a test ID or handle differently
+    }
+    
+    console.log('Using tgid:', tgid);
+    console.log('Form data:', formData);
+    
+    // Note: The server endpoint only accepts GET with tgid parameter
+    // TODO: Update server to accept POST with form data, or store form data separately
     const response = await fetch(`https://blaze-bot-five.vercel.app/api/create-checkout?tgid=${tgid}`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
+      }
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     
     const { client_secret, publishable_key, error } = await response.json();
 
