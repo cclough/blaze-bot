@@ -122,6 +122,7 @@ body {
 .wbc .vesicle:nth-child(5) { top: 29px; left: 21px; animation-delay: 1.8s; }
 
 
+
 /* Enhanced Glitch effects */
 .glitch {
     filter: drop-shadow(0 0 3px rgba(255,255,255,0.1)) contrast(1.3);
@@ -814,7 +815,7 @@ body {
 h2 {
     color: #ffffff;
     font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 1.2rem 0;
     text-shadow: 
@@ -822,7 +823,7 @@ h2 {
         0 0 20px rgba(255, 255, 255, 0.2);
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    animation: text-glitch 10s infinite;
+    animation: text-glitch 30s infinite;
     position: relative;
 }
 
@@ -839,13 +840,13 @@ h2::after {
 }
 
 h2::before {
-    animation: glitch-1 0.5s infinite;
+    animation: glitch-1 25s infinite;
     color: #ff0000;
     z-index: -1;
 }
 
 h2::after {
-    animation: glitch-2 0.5s infinite;
+    animation: glitch-2 25s infinite;
     color: #00ffff;
     z-index: -2;
 }
@@ -1061,12 +1062,12 @@ button:active {
 }
 
 @keyframes text-glitch {
-    0%, 93%, 100% { 
+    0%, 98%, 100% { 
         text-shadow: 
             0 2px 4px rgba(0, 0, 0, 0.8),
             0 0 20px rgba(255, 255, 255, 0.2);
     }
-    94% { 
+    99% { 
         text-shadow: 
             2px 2px 4px rgba(0, 0, 0, 0.8),
             0 0 30px rgba(255, 255, 255, 0.4),
@@ -1076,15 +1077,15 @@ button:active {
 }
 
 @keyframes glitch-1 {
-    0%, 90%, 100% { opacity: 0; }
-    91% { opacity: 0.8; transform: translate(-2px, -2px); }
-    92% { opacity: 0; }
+    0%, 98%, 100% { opacity: 0; }
+    98.5% { opacity: 0.8; transform: translate(-2px, -2px); }
+    99% { opacity: 0; }
 }
 
 @keyframes glitch-2 {
-    0%, 90%, 100% { opacity: 0; }
-    91.5% { opacity: 0.8; transform: translate(2px, 2px); }
-    92.5% { opacity: 0; }
+    0%, 98%, 100% { opacity: 0; }
+    98.7% { opacity: 0.8; transform: translate(2px, 2px); }
+    99.2% { opacity: 0; }
 }
 
 @keyframes text-flicker {
@@ -1334,6 +1335,7 @@ button:active {
 
 .chart-preview-container canvas {
     max-height: 200px;
+    height: 200px !important;
     width: 100% !important;
 }
 
@@ -1438,4 +1440,558 @@ button.loading::after {
 
 @keyframes button-spinner {
     to { transform: rotate(360deg); }
+}
+
+/* Signup Form Styles */
+.signup-form {
+    padding: 1rem 2.5rem 2rem 2.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 140, 0, 0.5) rgba(0, 0, 0, 0.2);
+    max-height: calc(80vh - 120px); /* Prevent over-scrolling */
+}
+
+.signup-form .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 10; /* Ensure form fields are above background elements */
+}
+
+.signup-form .form-group label {
+    display: block;
+    color: #ffaa00;
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none; /* Prevent label from interfering with clicks */
+}
+
+.signup-form .form-group input, 
+.signup-form .form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.8); /* More opaque background */
+    border: 2px solid rgba(255, 140, 0, 0.4); /* Thicker border for better visibility */
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 15; /* Higher z-index for form inputs */
+    cursor: text; /* Ensure text cursor */
+}
+
+.signup-form .form-group input:focus, 
+.signup-form .form-group select:focus {
+    outline: none;
+    border-color: rgba(255, 140, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+    background: rgba(0, 0, 0, 0.9); /* Even more opaque when focused */
+}
+
+.signup-form .form-group input:hover, 
+.signup-form .form-group select:hover {
+    border-color: rgba(255, 140, 0, 0.6);
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.signup-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.signup-form .waiver-section {
+    margin: 2rem 0;
+    position: relative;
+    z-index: 10;
+}
+
+.signup-form .waiver-title {
+    color: #ffffff;
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.signup-form .waiver-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+    padding: 1rem;
+    background: rgba(255, 140, 0, 0.08); /* Slightly more visible */
+    border: 2px solid rgba(255, 140, 0, 0.3); /* Thicker border */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 15;
+    cursor: pointer; /* Make entire item clickable */
+}
+
+.signup-form .waiver-item:hover {
+    border-color: rgba(255, 140, 0, 0.5);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.15);
+    background: rgba(255, 140, 0, 0.12);
+}
+
+.signup-form .waiver-checkbox {
+    width: 20px; /* Slightly larger */
+    height: 20px;
+    margin-top: 2px;
+    accent-color: #ff8c00;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 20; /* Highest z-index for checkboxes */
+}
+
+.signup-form .waiver-text {
+    color: #dddddd;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex: 1;
+    user-select: none; /* Prevent text selection when clicking */
+}
+
+.signup-form .waiver-text strong {
+    color: #ff8c00;
+    font-weight: 600;
+}
+
+.signup-form .form-error {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: none;
+    position: relative;
+    z-index: 10;
+}
+
+/* Signup form specific overrides */
+.signup-form .content-card {
+    position: relative;
+    z-index: 100;
+}
+
+.signup-form .digital-noise {
+    pointer-events: none; /* Ensure background noise doesn't interfere */
+}
+
+/* Signup form scrollbar styles */
+.signup-form::-webkit-scrollbar {
+    width: 8px; /* Slightly wider for easier grabbing */
+}
+
+.signup-form::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.signup-form::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(255, 140, 0, 0.7), rgba(255, 69, 0, 0.7));
+    border-radius: 4px;
+    border: 1px solid rgba(255, 140, 0, 0.3);
+}
+
+.signup-form::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(255, 140, 0, 0.9), rgba(255, 69, 0, 0.9));
+}
+
+/* Signup form responsive styles */
+@media (max-width: 768px) {
+    .signup-form .form-row {
+        grid-template-columns: 1fr 1fr; /* Keep 2 columns on mobile */
+        gap: 0.8rem; /* Slightly smaller gap on mobile */
+    }
+    
+    .signup-form {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        max-height: calc(80vh - 100px); /* Adjust for mobile */
+    }
+    
+    .signup-form .form-group input, 
+    .signup-form .form-group select {
+        padding: 0.7rem; /* Slightly smaller padding on mobile */
+        font-size: 0.9rem; /* Slightly smaller font on mobile */
+    }
+    
+    .signup-form .form-group label {
+        font-size: 0.8rem; /* Smaller labels on mobile */
+    }
+    
+    .signup-form .waiver-text {
+        font-size: 0.8rem;
+    }
+    
+    .signup-form .waiver-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Paid page specific styles */
+.paid-page .content-overlay {
+    overflow: hidden; /* Prevent horizontal scrolling */
+}
+
+.paid-page .content-card {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.paid-page #message {
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin-bottom: 20px;
+    padding: 2rem 2.5rem;
+    background: #000;
+    color: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.paid-page .status-complete { color: #22c55e; }
+.paid-page .status-open { color: #f59e0b; }
+.paid-page .status-expired { color: #ef4444; }
+.paid-page .status-error { color: #ef4444; }
+
+.paid-page .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: paid-spinner 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes paid-spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Results page specific styles */
+.results-page .content-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px 30px 40px 30px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.results-page .content-card {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: calc(100vh - 120px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px) saturate(0.8);
+    border: 2px solid rgba(255, 140, 0, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.results-page .results-container {
+    padding: 20px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.results-page .results-header {
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.results-page .cyber-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 3em;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, #ff8c00, #ffaa00, #ff6600);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    margin: 0;
+    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.5));
+}
+
+.results-page .cyber-title::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff8c00, #ffaa00, #ff6600);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glitch-1 2.5s infinite;
+    opacity: 0.8;
+}
+
+.results-page .test-info {
+    margin-top: 15px;
+    font-family: 'Share Tech Mono', monospace;
+    color: rgba(255, 170, 0, 0.7);
+    font-size: 0.9em;
+}
+
+.results-page .test-info span {
+    margin: 0 15px;
+}
+
+/* Pattern Analysis Section */
+.results-page .pattern-analysis-section {
+    margin-bottom: 60px;
+}
+
+.results-page .section-title {
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', cursive;
+    font-size: 1.8em;
+    color: #ffaa00;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.results-page .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff8c00, transparent);
+}
+
+.results-page .radar-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto 40px;
+}
+
+.results-page .radar-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(255, 140, 0, 0.1) 0%, transparent 70%);
+    animation: results-pulse-glow 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes results-pulse-glow {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.results-page .pattern-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.results-page .pattern-item {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.results-page .pattern-item:hover {
+    border-color: rgba(255, 140, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+}
+
+.results-page .pattern-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: calc(var(--match-percent) * 1%);
+    background: linear-gradient(90deg, rgba(255, 140, 0, 0.1), rgba(255, 140, 0, 0.3));
+    transition: width 1s ease-out;
+}
+
+.results-page .pattern-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9em;
+    letter-spacing: 0.05em;
+}
+
+.results-page .pattern-value {
+    float: right;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: #ff8c00;
+    font-size: 1.1em;
+}
+
+/* Cytokine Chart Section */
+.results-page .cytokine-results-section {
+    margin-bottom: 60px;
+}
+
+.results-page .chart-container {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    margin: 20px 0;
+    height: 800px;
+}
+
+.results-page .chart-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff8c00, transparent, #ff8c00);
+    opacity: 0;
+    animation: results-border-pulse 4s linear infinite;
+    z-index: -1;
+}
+
+@keyframes results-border-pulse {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.5; }
+}
+
+/* Key Findings */
+.results-page .key-findings {
+    margin-top: 60px;
+}
+
+.results-page .findings-title {
+    font-family: 'Audiowide', cursive;
+    font-size: 1.5em;
+    color: #ffaa00;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.results-page .finding-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.results-page .finding-card {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    padding: 25px;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.results-page .finding-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(255, 140, 0, 0.2);
+    border-color: rgba(255, 140, 0, 0.5);
+}
+
+.results-page .finding-icon {
+    font-size: 2em;
+    filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.5));
+}
+
+.results-page .finding-content h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #ff8c00;
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    letter-spacing: 0.05em;
+}
+
+.results-page .finding-content p {
+    font-family: 'Jura', sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.results-page .finding-card.elevated {
+    border-color: rgba(255, 100, 100, 0.3);
+}
+
+.results-page .finding-card.elevated:hover {
+    border-color: rgba(255, 100, 100, 0.6);
+    box-shadow: 0 10px 30px rgba(255, 100, 100, 0.2);
+}
+
+.results-page .finding-card.normal {
+    border-color: rgba(100, 255, 100, 0.3);
+
+}
+
+.results-page .finding-card.normal:hover {
+    border-color: rgba(100, 255, 100, 0.6);
+    box-shadow: 0 10px 30px rgba(100, 255, 100, 0.2);
+}
+
+/* Responsive Design for Results */
+@media (max-width: 768px) {
+    .results-page .cyber-title {
+        font-size: 2em;
+    }
+    
+    .results-page .radar-container {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .results-page .pattern-legend {
+        grid-template-columns: 1fr;
+    }
 }
