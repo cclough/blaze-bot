@@ -133,54 +133,8 @@
       // Add loading state to button
       btn2.classList.add('loading');
       
-      // btn.showProgress();
-
-      const tgid = Telegram.WebApp.initDataUnsafe.user.id;
-      const response = await fetch(`https://blaze-bot-five.vercel.app/api/create-checkout?tgid=${tgid}`);
-      const { client_secret, publishable_key, error } = await response.json();
-
-      if (error) {
-        console.error('Error from backend:', error);
-        Telegram.WebApp.showAlert('Could not initiate payment. ' + error);
-        btn2.classList.remove('loading');
-        // btn.hideProgress();
-        return;
-      }
-
-      if (!client_secret) {
-        console.error('Client secret not received');
-        Telegram.WebApp.showAlert('Could not initiate payment. Missing client secret.');
-        btn2.classList.remove('loading');
-        // btn.hideProgress();
-        return;
-      }
-      
-      // Initialize Stripe with the publishable key from the server
-      stripe = Stripe(publishable_key || 'pk_test_51RSmgFHILCjSlj9r8aaZUKvBDt66nmhRiw5rNa6MbAoOC2PU2WCSfvqMkkIc8Z6KPin0bRJbuHQR0hayywU552wy00CtP4mF3r');
-      
-      if (boxElement) {
-        boxElement.style.display = 'none';
-        modalElement.style.display = 'none';
-        backgroundElement.style.display = 'none';
-      }
-      checkoutElement.style.display = 'block';
-      // btn.hide();
-
-      try {
-        const checkout = await stripe.initEmbeddedCheckout({
-          clientSecret: client_secret,
-        });
-
-        checkout.mount('#checkout');
-      } catch (e) {
-        console.error('Error mounting Stripe checkout:', e);
-        Telegram.WebApp.showAlert('Could not display payment form. ' + e.message);
-        if (boxElement) boxElement.style.display = 'block';
-        checkoutElement.style.display = 'none';
-        btn2.classList.remove('loading');
-        // btn.setText('Pay $1').show();
-        // btn.hideProgress();
-      }
+      // Redirect to signup page
+      window.location.href = 'signup.html';
     });
   </script>
 
