@@ -493,6 +493,91 @@ body {
 .glitch-teleport { animation-name: glitch-teleport !important; }
 .glitch-stutter { animation-name: glitch-stutter !important; }
 
+/* Steps Container Styles */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem 0;
+    align-items: center;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: rgba(255, 140, 0, 0.05);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+}
+
+.step-connector {
+    width: 3px;
+    height: 15px;
+    background: linear-gradient(180deg, rgba(255, 140, 0, 0.6), rgba(255, 140, 0, 0.3), rgba(255, 140, 0, 0.6));
+    margin: 0.2rem 0;
+    position: relative;
+    animation: connection-pulse 2s infinite;
+}
+
+/* Remove the dot from step connector */
+.step-connector::before {
+    display: none;
+}
+
+@keyframes connection-pulse {
+    0%, 100% { 
+        opacity: 0.6;
+        transform: scaleY(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: scaleY(1.1);
+    }
+}
+
+.step-item:hover {
+    border-color: rgba(255, 140, 0, 0.4);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.1);
+}
+
+.step-number {
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+}
+
+.step-content h4 {
+    color: #ff8c00;
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.step-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
 /* Content overlay styles */
 .content-overlay {
     position: fixed;
@@ -507,7 +592,8 @@ body {
     z-index: 1000;
     pointer-events: none; /* Allow clicks to pass through to background */
     text-align: center;
-    padding: 5rem;
+    padding: 2rem;
+    overflow: hidden; /* Prevent horizontal scrolling */
 }
 
 .content-card {
@@ -516,7 +602,8 @@ body {
      border: 2px solid rgba(255, 255, 255, 0.15);
      border-radius: 20px;
      padding: 0;
-     max-width: 350px;  /* 288px; */
+     width: 350px;
+     max-width: 90vw;
      max-height: 80vh;
      pointer-events: auto; /* Re-enable clicks for the card */
      box-shadow: 
@@ -533,6 +620,7 @@ body {
  .content-scroll {
      padding: 1rem 2.5rem 2rem 2.5rem;
      overflow-y: auto;
+     overflow-x: hidden; /* Prevent horizontal scrolling */
      flex: 1;
      scrollbar-width: thin;
      scrollbar-color: rgba(255, 140, 0, 0.5) rgba(0, 0, 0, 0.2);
@@ -725,7 +813,7 @@ body {
 
 h2 {
     color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 1.2rem 0;
@@ -733,6 +821,7 @@ h2 {
         0 2px 4px rgba(0, 0, 0, 0.8),
         0 0 20px rgba(255, 255, 255, 0.2);
     letter-spacing: 0.5px;
+    text-transform: uppercase;
     animation: text-glitch 10s infinite;
     position: relative;
 }
@@ -773,12 +862,14 @@ p {
 
  h3 {
      color: #ffffff;
-     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-     font-size: 1.1rem;
+     font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
+     font-size: 1.3rem;
      font-weight: 600;
      margin: 1.5rem 0 0.8rem 0;
      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
      opacity: 0.95;
+     letter-spacing: 0.05em;
+     text-transform: uppercase;
  }
 
  .diagram-placeholder {
@@ -804,6 +895,7 @@ p {
 
  .diagram-title {
      color: #ff8c00;
+     font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
      font-size: 0.9rem;
      font-weight: 600;
      margin-bottom: 1rem;
@@ -1217,3 +1309,133 @@ button:active {
      50% { transform: translate(1px, -1px) scale(0.999); }
      75% { transform: translate(-1px, -1px) scale(1.001); }
  }
+
+/* Chart Preview Container Styles */
+.chart-preview-container {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-title {
+    color: #ff8c00;
+    font-family: 'Audiowide', 'Orbitron', 'Electrolize', 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.chart-preview-container canvas {
+    max-height: 200px;
+    width: 100% !important;
+}
+
+.chart-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    pointer-events: none;
+}
+
+.chart-preview-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.1), transparent);
+    animation: chart-scan 4s infinite;
+}
+
+@keyframes chart-scan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Responsive adjustments for steps */
+@media (max-width: 768px) {
+    .content-overlay {
+        padding: 1rem;
+    }
+    
+    .content-card {
+        width: 320px;
+        max-width: 95vw;
+    }
+    
+    .content-scroll {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+    
+    .steps-container {
+        gap: 0;
+    }
+    
+    .step-item {
+        padding: 0.8rem;
+        max-width: 100%;
+    }
+    
+    .step-connector {
+        height: 12px;
+        margin: 0.1rem 0;
+    }
+    
+    .step-number {
+        width: 1.8rem;
+        height: 1.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .step-content h4 {
+        font-size: 0.9rem;
+    }
+    
+    .step-content p {
+        font-size: 0.85rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Button loading state */
+button.loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+button.loading span {
+    visibility: hidden;
+}
+
+button.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: button-spinner 0.8s linear infinite;
+}
+
+@keyframes button-spinner {
+    to { transform: rotate(360deg); }
+}

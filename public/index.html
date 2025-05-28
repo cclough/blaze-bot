@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="/styles.css" />
-  <script src="/app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,40 +38,64 @@
                 <span class="blaze-letter z">z</span>
                 <span class="blaze-letter e">e</span>
             </div>
-            <h2 data-text="Understand Your Immune System">Understand Your Immune System</h2>
+            <h2 data-text="Decode Your Immune Intelligence">Understand your immune system</h2>
             
-            <p>Run a comprehensive 48-cytokine inflammation test. Results visualized in real-time through Telegram with advanced biomarker analysis.</p>
+            <p>Right now all you get in standard blood tests e.g. CRP, which is insensitive and non-specific. Behind these numbers is rich complexity.</p>
             
-            <h3>What We Measure</h3>
-            <p>Our advanced panel analyzes key inflammatory markers including interleukins (IL-1β, IL-6, IL-8, IL-10), tumor necrosis factors (TNF-α), interferons (IFN-γ), and chemokines that regulate immune cell migration and activation.</p>
+            <p>We give you insight into what your incredible immune system is doing.</p>
             
-            <div class="diagram-placeholder">
-                <div class="diagram-title">Cytokine Network Analysis</div>
-                <div class="diagram-content">
-                    <div class="node">IL-6</div>
-                    <div class="node">TNF-α</div>
-                    <div class="node">IL-1β</div>
-                    <div class="connection"></div>
+            <h3>How It Works - 4 Simple Steps</h3>
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Sign Up & Payment</h4>
+                        <p>Book your test through our secure platform</p>
+                    </div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Visit Our Test Centre</h4>
+                        <p>Come to our test centre in SF and get a blood draw taken</p>
+                    </div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Receive Results</h4>
+                        <p>A week later - receive your comprehensive results</p>
+                    </div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Track Over Time</h4>
+                        <p>Repeat any time to monitor your immune health</p>
+                    </div>
                 </div>
             </div>
             
-            <h3>Clinical Applications</h3>
-            <p>This comprehensive inflammatory profile helps identify systemic inflammation patterns associated with autoimmune conditions, metabolic disorders, cardiovascular risk, and chronic inflammatory states. Early detection enables targeted interventions.</p>
+            <h3>Analysis</h3>
+            <p>We analyze <strong>48 different immune signaling molecules</strong> in your blood (e.g. cytokines), comparing them vs population averages:</p>
             
-            <h3>Sample Collection</h3>
-            <p>Simple blood draw at our certified collection centers. Samples are processed using advanced multiplex immunoassay technology with results typically available within 3-5 business days.</p>
-            
-            <div class="diagram-placeholder">
-                <div class="diagram-title">Processing Pipeline</div>
-                <div class="diagram-content">
-                    <div class="step">Collection → Processing → Analysis → Results</div>
-                </div>
+            <div class="chart-preview-container">
+                <div class="chart-title">Sample Cytokine Analysis (First 8 Markers)</div>
+                <canvas id="sampleCytokineChart"></canvas>
+                <div class="chart-fade"></div>
             </div>
             
-            <h3>Personalized Insights</h3>
-            <p>Your results include detailed explanations of each biomarker, reference ranges, and personalized recommendations based on your unique inflammatory signature. All data is securely transmitted through our encrypted Telegram integration.</p>
+            <p>We also explain what <strong>inflammation patterns</strong> we see in your profile:</p>
             
-            <p>Advanced machine learning algorithms analyze patterns across multiple cytokines to provide comprehensive risk assessments and actionable health insights tailored to your individual profile.</p>
+            <div class="chart-preview-container">
+                <div class="chart-title">Inflammation Pattern Analysis</div>
+                <canvas id="samplePatternChart"></canvas>
+            </div>
+            
+            <p>This analysis gives you a deeper understanding of your immune system's current state, so you are better informed on your health journey.</p>
         </div>
         <div class="button-container">
           <!-- onclick="buyTest()" -->
@@ -105,6 +130,9 @@
 
     // btn.onClick(async () => {
     btn2.addEventListener('click', async () => {
+      // Add loading state to button
+      btn2.classList.add('loading');
+      
       // btn.showProgress();
 
       const tgid = Telegram.WebApp.initDataUnsafe.user.id;
@@ -114,6 +142,7 @@
       if (error) {
         console.error('Error from backend:', error);
         Telegram.WebApp.showAlert('Could not initiate payment. ' + error);
+        btn2.classList.remove('loading');
         // btn.hideProgress();
         return;
       }
@@ -121,6 +150,7 @@
       if (!client_secret) {
         console.error('Client secret not received');
         Telegram.WebApp.showAlert('Could not initiate payment. Missing client secret.');
+        btn2.classList.remove('loading');
         // btn.hideProgress();
         return;
       }
@@ -147,8 +177,156 @@
         Telegram.WebApp.showAlert('Could not display payment form. ' + e.message);
         if (boxElement) boxElement.style.display = 'block';
         checkoutElement.style.display = 'none';
+        btn2.classList.remove('loading');
         // btn.setText('Pay $1').show();
         // btn.hideProgress();
+      }
+    });
+  </script>
+
+  <script>
+    // Initialize sample charts when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sample Cytokine Chart (First 8 markers)
+      const cytokineCtx = document.getElementById('sampleCytokineChart');
+      if (cytokineCtx) {
+        const cytokineChart = new Chart(cytokineCtx, {
+          type: 'bar',
+          data: {
+            labels: ['IL-1β', 'IL-6', 'IL-8', 'IL-10', 'TNF-α', 'IFN-γ', 'IL-12', 'IL-17'],
+            datasets: [
+              {
+                label: 'Your Values',
+                data: [85, 120, 95, 75, 110, 88, 92, 78],
+                backgroundColor: [
+                  'rgba(255, 100, 100, 0.7)', // IL-1β elevated
+                  'rgba(255, 100, 100, 0.7)', // IL-6 elevated
+                  'rgba(100, 255, 100, 0.7)', // IL-8 normal
+                  'rgba(100, 255, 100, 0.7)', // IL-10 normal
+                  'rgba(255, 100, 100, 0.7)', // TNF-α elevated
+                  'rgba(100, 255, 100, 0.7)', // IFN-γ normal
+                  'rgba(100, 255, 100, 0.7)', // IL-12 normal
+                  'rgba(100, 255, 100, 0.7)'  // IL-17 normal
+                ],
+                borderColor: [
+                  'rgba(255, 100, 100, 1)',
+                  'rgba(255, 100, 100, 1)',
+                  'rgba(100, 255, 100, 1)',
+                  'rgba(100, 255, 100, 1)',
+                  'rgba(255, 100, 100, 1)',
+                  'rgba(100, 255, 100, 1)',
+                  'rgba(100, 255, 100, 1)',
+                  'rgba(100, 255, 100, 1)'
+                ],
+                borderWidth: 1
+              },
+              {
+                label: 'Healthy Range',
+                data: [100, 100, 100, 100, 100, 100, 100, 100],
+                type: 'line',
+                borderColor: 'rgba(255, 170, 0, 0.8)',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                max: 150,
+                grid: {
+                  color: 'rgba(255, 140, 0, 0.1)'
+                },
+                ticks: {
+                  color: 'rgba(255, 170, 0, 0.7)',
+                  font: {
+                    family: 'Share Tech Mono',
+                    size: 10
+                  }
+                }
+              },
+              y: {
+                grid: {
+                  color: 'rgba(255, 140, 0, 0.1)'
+                },
+                ticks: {
+                  color: 'rgba(255, 170, 0, 0.7)',
+                  font: {
+                    family: 'Share Tech Mono',
+                    size: 10
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Sample Pattern Chart (Radar)
+      const patternCtx = document.getElementById('samplePatternChart');
+      if (patternCtx) {
+        const patternChart = new Chart(patternCtx, {
+          type: 'radar',
+          data: {
+            labels: ['Viral', 'Bacterial', 'Allergy', 'Sleep-Deprived', 'Over-Training', 'Autoimmune'],
+            datasets: [{
+              label: 'Pattern Match %',
+              data: [78, 45, 62, 89, 52, 41],
+              backgroundColor: 'rgba(255, 140, 0, 0.2)',
+              borderColor: '#ff8c00',
+              borderWidth: 2,
+              pointBackgroundColor: '#ff8c00',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: '#ff8c00'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                  color: 'rgba(255, 170, 0, 0.5)',
+                  backdropColor: 'transparent',
+                  font: {
+                    family: 'Share Tech Mono',
+                    size: 10
+                  }
+                },
+                grid: {
+                  color: 'rgba(255, 140, 0, 0.2)'
+                },
+                pointLabels: {
+                  color: '#ffaa00',
+                  font: {
+                    family: 'Rajdhani',
+                    size: 11,
+                    weight: '600'
+                  }
+                }
+              }
+            }
+          }
+        });
       }
     });
   </script>

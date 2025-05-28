@@ -14,19 +14,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Russo+One&family=Audiowide&family=Black+Ops+One&family=Bungee&family=Monoton&family=Wallpoet&family=Electrolize&family=Share+Tech+Mono&family=Iceberg&family=Faster+One&family=Megrim&family=Jura:wght@300;400;500;600;700&family=Saira+Stencil+One&family=Turret+Road:wght@200;300;400;500;700;800&family=Michroma&family=Syncopate:wght@400;700&family=Teko:wght@300;400;500;600;700&family=Squada+One&family=Aldrich&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
 
-  <style>
-    /* body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: system-ui;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-      background: #f9fafb;
-    } */
+  <style>    
+    .content-overlay {
+      overflow: hidden; /* Prevent horizontal scrolling */
+    }
+    
+    .content-card {
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+    }
+    
     #message {
       font-size: 16px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -36,6 +32,8 @@
       color: white;
       border-radius: 1rem;
       box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
     .status-complete { color: #22c55e; }
     .status-open { color: #f59e0b; }
