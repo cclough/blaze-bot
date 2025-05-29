@@ -43,18 +43,100 @@ app.post('/bot/message', async (req, res) => {
   }
 });
 
-/* 1 ─ create Checkout Session */
-app.get('/api/create-checkout', async (req,res)=>{
+/* 1 ─ create Checkout Session with form data */
+app.post('/api/create-checkout', async (req, res) => {
   try {
     const tg = req.query.tgid;
-    if(!tg) {
-      return res.status(400).json({error:'tgid missing'});
+    if (!tg) {
+      return res.status(400).json({ error: 'tgid missing' });
     }
+    
+    // Extract form data from request body
+    const { age, gender, height, weight, units_preference, waivers_accepted } = req.body;
     
     // Get the host from the request
     const host = req.headers.origin || process.env.FRONTEND_URL;
     
     console.log('Creating checkout session for telegram_id:', tg);
+    console.log('Form data received:', { age, gender, height, weight, units_preference, waivers_accepted });
+    
+    // First, store the user data in the database
+    const userData = {
+      telegram_id: parseInt(tg),
+      age: age ? parseInt(age) : null,
+      gender: gender || null,
+      height_cm: height ? parseInt(height) : null, // Always in cm
+      weight_kg: weight ? parseInt(weight) : null, // Always in kg
+      units_preference: units_preference || 'imperial',
+      waivers_accepted: waivers_accepted === 'true',
+      status: 'pending' // Will be updated to 'paid' after successful payment
+    };
+    
+    console.log('💾 Attempting to insert user data:', userData);
+    
+    // Insert or update user data
+    const { data, error } = await supa
+      .from('payments')
+      .upsert(userData, { 
+        onConflict: 'telegram_id',
+        ignoreDuplicates: false 
+      });
+    
+    if (error) {
+      console.error('❌ Supabase error:', error);
+      return res.status(500).json({ 
+        error: 'Failed to store user data',
+        message: error.message 
+      });
+    }
+    
+    console.log('✅ User data stored successfully:', data);
+    
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      ui_mode: 'embedded',
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          unit_amount: 100,
+          product_data: {
+            name: 'Blaze panel'
+          }
+        },
+        quantity: 1
+      }],
+      return_url: `${host}/paid.html?session_id={CHECKOUT_SESSION_ID}`,
+      client_reference_id: tg
+    });
+    
+    console.log('Checkout session created:', session.id);
+    
+    res.json({ 
+      client_secret: session.client_secret,
+      publishable_key: process.env.STRIPE_PUB
+    });
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    res.status(500).json({ 
+      error: 'Failed to create checkout session',
+      message: error.message 
+    });
+  }
+});
+
+// Keep the old GET endpoint for backward compatibility
+app.get('/api/create-checkout', async (req, res) => {
+  try {
+    const tg = req.query.tgid;
+    if (!tg) {
+      return res.status(400).json({ error: 'tgid missing' });
+    }
+    
+    // Get the host from the request
+    const host = req.headers.origin || process.env.FRONTEND_URL;
+    
+    console.log('Creating checkout session (legacy) for telegram_id:', tg);
     
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -102,19 +184,17 @@ app.post('/api/process-payment', async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(session_id);
     
     if (session.payment_status === 'paid') {
-      // Process payment directly here
-      const insertData = { 
-        telegram_id: telegram_id, 
-        status: 'paid'
-      };
-      console.log('💾 Attempting to insert payment data:', insertData);
+      // Update the existing record's status to 'paid'
+      const { data, error } = await supa
+        .from('payments')
+        .update({ status: 'paid' })
+        .eq('telegram_id', parseInt(telegram_id));
       
-      const { data, error } = await supa.from('payments').insert(insertData);
       if (error) {
         console.error('❌ Supabase error:', error);
         throw error;
       } else {
-        console.log('✅ Payment record inserted:', data);
+        console.log('✅ Payment status updated to paid:', data);
         await sendQRCode(telegram_id);
         res.json({ success: true, message: 'Payment processed successfully' });
       }

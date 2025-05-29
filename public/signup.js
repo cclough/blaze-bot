@@ -152,10 +152,6 @@ signupForm.addEventListener('submit', async (e) => {
     waivers_accepted: 'true'
   };
   
-  // WARNING: Currently the form data is not being saved to the database
-  // The server endpoint needs to be updated to accept and store this data
-  console.warn('Form data collected but not saved:', formData);
-  
   try {
     // Get Telegram user ID with better error handling
     let tgid;
@@ -170,13 +166,13 @@ signupForm.addEventListener('submit', async (e) => {
     console.log('Using tgid:', tgid);
     console.log('Form data:', formData);
     
-    // Note: The server endpoint only accepts GET with tgid parameter
-    // TODO: Update server to accept POST with form data, or store form data separately
+    // Send form data to server to store in database and create checkout session
     const response = await fetch(`https://blaze-bot-five.vercel.app/api/create-checkout?tgid=${tgid}`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify(formData)
     });
     
     if (!response.ok) {
