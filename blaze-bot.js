@@ -74,13 +74,10 @@ app.post('/api/create-checkout', async (req, res) => {
     
     console.log('💾 Attempting to insert user data:', userData);
     
-    // Insert or update user data
+    // Insert user data
     const { data, error } = await supa
       .from('payments')
-      .upsert(userData, { 
-        onConflict: 'telegram_id',
-        ignoreDuplicates: false 
-      });
+      .insert(userData);
     
     if (error) {
       console.error('❌ Supabase error:', error);
