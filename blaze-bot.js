@@ -69,6 +69,8 @@ app.post('/api/create-checkout', async (req, res) => {
       weight_kg: weight ? parseInt(weight) : null, // Always in kg
       units_preference: units_preference || 'imperial',
       waivers_accepted: waivers_accepted === 'true',
+      amount: 100, // $1.00 in cents
+      currency: 'usd',
       status: 'pending' // Will be updated to 'paid' after successful payment
     };
     
@@ -108,6 +110,19 @@ app.post('/api/create-checkout', async (req, res) => {
     });
     
     console.log('Checkout session created:', session.id);
+    
+    // Update the record with the Stripe session ID
+    const { error: updateError } = await supa
+      .from('payments')
+      .update({ stripe_session_id: session.id })
+      .eq('telegram_id', parseInt(tg))
+      .eq('status', 'pending');
+    
+    if (updateError) {
+      console.error('❌ Error updating stripe_session_id:', updateError);
+    } else {
+      console.log('✅ Stripe session ID updated successfully');
+    }
     
     res.json({ 
       client_secret: session.client_secret,
