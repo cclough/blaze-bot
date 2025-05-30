@@ -76,10 +76,12 @@ app.post('/api/create-checkout', async (req, res) => {
     
     console.log('💾 Attempting to insert user data:', userData);
     
-    // Insert user data
-    const { data, error } = await supa
+    // Insert user data and get the inserted record
+    const { data: insertedData, error } = await supa
       .from('payments')
-      .insert(userData);
+      .insert(userData)
+      .select('id')
+      .single();
     
     if (error) {
       console.error('❌ Supabase error:', error);
@@ -89,7 +91,7 @@ app.post('/api/create-checkout', async (req, res) => {
       });
     }
     
-    console.log('✅ User data stored successfully:', data);
+    console.log('✅ User data stored successfully with ID:', insertedData.id);
     
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -111,17 +113,16 @@ app.post('/api/create-checkout', async (req, res) => {
     
     console.log('Checkout session created:', session.id);
     
-    // Update the record with the Stripe session ID
+    // Update the specific record with the Stripe session ID using the record ID
     const { error: updateError } = await supa
       .from('payments')
       .update({ stripe_session_id: session.id })
-      .eq('telegram_id', parseInt(tg))
-      .eq('status', 'pending');
+      .eq('id', insertedData.id);
     
     if (updateError) {
       console.error('❌ Error updating stripe_session_id:', updateError);
     } else {
-      console.log('✅ Stripe session ID updated successfully');
+      console.log('✅ Stripe session ID updated successfully for record ID:', insertedData.id);
     }
     
     res.json({ 
@@ -196,17 +197,23 @@ app.post('/api/process-payment', async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(session_id);
     
     if (session.payment_status === 'paid') {
-      // Update the existing record's status to 'paid'
+      // Update the existing record's status to 'paid' and ensure stripe_session_id is saved
       const { data, error } = await supa
         .from('payments')
-        .update({ status: 'paid' })
-        .eq('telegram_id', parseInt(telegram_id));
+        .update({ 
+          status: 'paid',
+          stripe_session_id: session_id // Ensure the session ID is saved
+        })
+        .eq('telegram_id', parseInt(telegram_id))
+        .eq('status', 'pending') // Only update pending records
+        .order('created_at', { ascending: false }) // Get the most recent one
+        .limit(1);
       
       if (error) {
         console.error('❌ Supabase error:', error);
         throw error;
       } else {
-        console.log('✅ Payment status updated to paid:', data);
+        console.log('✅ Payment status updated to paid with session ID:', data);
         await sendQRCode(telegram_id);
         res.json({ success: true, message: 'Payment processed successfully' });
       }
@@ -233,17 +240,17 @@ async function sendQRCode(telegramId) {
     // Add a small delay before sending QR code
     await new Promise(resolve => setTimeout(resolve, 3000));
     await bot.sendPhoto(telegramId, qrBuffer, { caption: 'Show this QR at your blood draw.' });
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    await bot.sendMessage(telegramId, 'View your results:', {
-      reply_markup: {
-        inline_keyboard: [[
-          {
-            text: '🔬 View Results',
-            web_app: { url: `${process.env.FRONTEND_URL}/results.html` }
-          }
-        ]]
-      }
-    });
+    // await new Promise(resolve => setTimeout(resolve, 3000));
+    // await bot.sendMessage(telegramId, 'View your results:', {
+    //   reply_markup: {
+    //     inline_keyboard: [[
+    //       {
+    //         text: '🔬 View Results',
+    //         web_app: { url: `${process.env.FRONTEND_URL}/results.html` }
+    //       }
+    //     ]]
+    //   }
+    // });
     console.log('✅ QR code sent to user successfully');
   } catch (error) {
     console.error('❌ Error sending QR code:', error);

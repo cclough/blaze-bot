@@ -1,5 +1,42 @@
- // Available movement animations
- const animations = [
+// Common font loading detection for all pages
+(function() {
+  // Function to check if fonts are loaded
+  function areFontsLoaded() {
+    // Check for critical fonts
+    const criticalFonts = ['Audiowide', 'Teko'];
+    
+    if ('fonts' in document) {
+      return Promise.all(
+        criticalFonts.map(font => document.fonts.check(`1em ${font}`))
+      ).then(results => results.every(result => result));
+    }
+    
+    // Fallback for browsers without font loading API
+    return new Promise(resolve => {
+      setTimeout(() => resolve(true), 100);
+    });
+  }
+  
+  // Function to show content
+  function showContent() {
+    document.body.classList.add('loaded');
+  }
+  
+  // Wait for DOM and fonts
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      areFontsLoaded().then(showContent);
+    });
+  } else {
+    areFontsLoaded().then(showContent);
+  }
+  
+  // Fallback timeout to ensure content shows even if font detection fails
+  setTimeout(showContent, 500);
+})();
+
+// Available movement animations
+const animations = [
     'float-left-to-right',
     'float-right-to-left', 
     'float-top-to-bottom',

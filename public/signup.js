@@ -195,8 +195,15 @@ signupForm.addEventListener('submit', async (e) => {
       return;
     }
     
+    if (!publishable_key) {
+      console.error('Publishable key not received');
+      Telegram.WebApp.showAlert('Could not initiate payment. Missing publishable key.');
+      proceedButton.classList.remove('loading');
+      return;
+    }
+    
     // Initialize Stripe with the publishable key from the server
-    stripe = Stripe(publishable_key || 'pk_test_51RSmgFHILCjSlj9r8aaZUKvBDt66nmhRiw5rNa6MbAoOC2PU2WCSfvqMkkIc8Z6KPin0bRJbuHQR0hayywU552wy00CtP4mF3r');
+    stripe = Stripe(publishable_key);
     
     modalElement.style.display = 'none';
     backgroundElement.style.display = 'none';
