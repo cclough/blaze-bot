@@ -1,4 +1,29 @@
 // Signup page JavaScript
+
+// RADICAL FIX: Stop all background animations and intervals
+// Clear ALL intervals and timeouts that might be running
+const highestIntervalId = setInterval(() => {}, 0);
+for (let i = 0; i <= highestIntervalId; i++) {
+  clearInterval(i);
+}
+
+const highestTimeoutId = setTimeout(() => {}, 0);
+for (let i = 0; i <= highestTimeoutId; i++) {
+  clearTimeout(i);
+}
+
+// Remove all animated elements from the DOM
+document.querySelectorAll('.wbc-wrapper, .wbc, .blood-particle').forEach(el => el.remove());
+
+// Disable the background container entirely
+const bgContainer = document.querySelector('.background-container');
+if (bgContainer) {
+  bgContainer.style.display = 'none';
+}
+
+// Prevent app.js from running its initialization
+window.stopAnimations = true;
+
 Telegram.WebApp.ready();
 
 const proceedButton = document.getElementById('proceed-button');
@@ -251,15 +276,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Trigger change event for validation
       checkbox.dispatchEvent(new Event('change'));
-    });
-  });
-  
-  // Prevent form field issues by ensuring proper focus
-  const formInputs = document.querySelectorAll('input, select');
-  formInputs.forEach(input => {
-    input.addEventListener('click', function(e) {
-      e.stopPropagation();
-      this.focus();
     });
   });
 }); 

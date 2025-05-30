@@ -236,10 +236,10 @@ async function sendQRCode(telegramId) {
   try {
     console.log('📱 Sending QR code to telegram user:', telegramId);
     const qrBuffer = await QRCode.toBuffer(`appt-${Date.now()}-tg-${telegramId}`);
-    await bot.sendMessage(telegramId, '✅ Payment received – see you soon!');
+    await bot.sendMessage(telegramId, '✅ Payment received');
     // Add a small delay before sending QR code
     await new Promise(resolve => setTimeout(resolve, 3000));
-    await bot.sendPhoto(telegramId, qrBuffer, { caption: 'Show this QR at your blood draw.' });
+    await bot.sendPhoto(telegramId, qrBuffer, { caption: 'Show this QR at your blood draw. See you soon!' });
     // await new Promise(resolve => setTimeout(resolve, 3000));
     // await bot.sendMessage(telegramId, 'View your results:', {
     //   reply_markup: {

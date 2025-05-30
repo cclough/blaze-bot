@@ -392,6 +392,12 @@ function createBloodParticle() {
 
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
+    // SKIP ALL ANIMATIONS IF ON SIGNUP PAGE
+    if (window.stopAnimations) {
+        console.log('Animations disabled for signup page');
+        return;
+    }
+    
     populateCells();
     randomizeWBCPositions();
     
